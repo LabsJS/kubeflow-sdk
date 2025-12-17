@@ -117,7 +117,7 @@ jobs:
           uvx twine check dist/*
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         with:
           name: dist-${{ needs.prepare.outputs.version }}
           path: dist/
@@ -148,7 +148,7 @@ jobs:
       url: https://pypi.org/project/kubeflow/
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v6
         with:
           name: dist-${{ needs.prepare.outputs.version }}
           path: dist/
@@ -170,7 +170,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ needs.prepare.outputs.branch }}
       - name: Download build artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v6
         with:
           name: dist-${{ needs.prepare.outputs.version }}
           path: dist/
@@ -199,7 +199,7 @@ jobs:
             echo "EOF"
           } >> $GITHUB_OUTPUT
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ needs.prepare.outputs.version }}
           name: ${{ needs.prepare.outputs.version }}

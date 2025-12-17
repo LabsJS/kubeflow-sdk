@@ -49,6 +49,13 @@ def get_container_devices(
     elif constants.CPU_LABEL in resources.limits:
         device = constants.CPU_LABEL
         device_count = resources.limits[constants.CPU_LABEL].actual_instance
+    elif any(k.startswith(constants.GPU_MIG_PREFIX) for k in resources.limits):
+        mig_keys = [k for k in resources.limits if k.startswith(constants.GPU_MIG_PREFIX)]
+        if len(mig_keys) > 1:
+            raise Exception(f"Multiple MIG resource types are not supported yet: {mig_keys}")
+        mig_key = mig_keys[0]
+        device = mig_key.split("/")[1]
+        device_count = resources.limits[mig_key].actual_instance
     else:
         raise Exception(f"Unknown device type in the container resources: {resources.limits}")
     if device_count is None:
@@ -227,6 +234,20 @@ def get_resources_per_node(
     }
     if "gpu" in resources:
         resources["nvidia.com/gpu"] = resources.pop("gpu")
+
+    # Optional alias for MIG: "mig-<profile>" -> "nvidia.com/mig-<profile>"
+    # Example: "mig-1g.5gb" -> "nvidia.com/mig-1g.5gb"
+    mig_alias_keys = [k for k in resources if k.startswith("mig-")]
+    for k in mig_alias_keys:
+        resources[f"{constants.GPU_MIG_PREFIX}{k[len('mig-') :]}"] = resources.pop(k)
+
+    mig_keys = [k for k in resources if k.startswith(constants.GPU_MIG_PREFIX)]
+    if len(mig_keys) > 1:
+        raise ValueError(f"Multiple MIG resource types are not supported: {mig_keys}")
+    if mig_keys and "nvidia.com/gpu" in resources:
+        raise ValueError(
+            f"GPU (nvidia.com/gpu) and MIG ({mig_keys[0]}) cannot be requested together"
+        )
 
     resources = models.IoK8sApiCoreV1ResourceRequirements(
         requests=resources,
