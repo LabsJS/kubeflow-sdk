@@ -38,7 +38,24 @@ class CustomTrainer:
             Python packages. The first URL will be the index-url, and remaining ones
             are extra-index-urls.
         num_nodes (`Optional[int]`): The number of nodes to use for training.
-        resources_per_node (`Optional[dict]`): The computing resources to allocate per node.
+        resources_per_node (`Optional[dict]`):
+            Kubernetes resource requests/limits per node.
+
+            For GPU resources, you can specify either the full extended resource name or a
+            short alias:
+
+                - NVIDIA GPU:
+                    * "nvidia.com/gpu": 1
+                    * "gpu": 1 (alias for "nvidia.com/gpu")
+
+                - NVIDIA MIG profile:
+                    * "nvidia.com/mig-<profile>": 1
+                    * "mig-<profile>": 1 (alias for "nvidia.com/mig-<profile>")
+                      e.g. "mig-1g.5gb" -> "nvidia.com/mig-1g.5gb"
+
+            Note:
+                - Only a single MIG resource type is supported per `resources_per_node` dict.
+                - GPU and MIG resources cannot be requested together.
         env (`Optional[dict[str, str]]`): The environment variables to set in the training nodes.
     """
 
@@ -62,7 +79,24 @@ class CustomTrainerContainer:
     Args:
         image (`str`): The container image that encapsulates the entire model training process.
         num_nodes (`Optional[int]`): The number of nodes to use for training.
-        resources_per_node (`Optional[dict]`): The computing resources to allocate per node.
+        resources_per_node (`Optional[dict]`):
+            Kubernetes resource requests/limits per node.
+
+            For GPU resources, you can specify either the full extended resource name or a
+            short alias:
+
+                - NVIDIA GPU:
+                    * "nvidia.com/gpu": 1
+                    * "gpu": 1 (alias for "nvidia.com/gpu")
+
+                - NVIDIA MIG profile:
+                    * "nvidia.com/mig-<profile>": 1
+                    * "mig-<profile>": 1 (alias for "nvidia.com/mig-<profile>")
+                      e.g. "mig-1g.5gb" -> "nvidia.com/mig-1g.5gb"
+
+            Note:
+                - Only a single MIG resource type is supported per `resources_per_node` dict.
+                - GPU and MIG resources cannot be requested together.
         env (`Optional[dict[str, str]]`): The environment variables to set in the training nodes.
     """
 
