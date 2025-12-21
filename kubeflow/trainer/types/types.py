@@ -42,7 +42,8 @@ class CustomTrainer:
           ```python
           resources_per_node = {"gpu": 4, "cpu": 5, "memory": "10G"}
           ```
-         If your compute supports fractional GPUs (e.g. multi-instance GPU), you can set the resources as follows (request 1 GPU slice of 5Gb) :
+         If your compute supports fractional GPUs (e.g. multi-instance GPU),
+            you can set the resources as follows (request 1 GPU slice of 5Gb) :
           ```python
           resources_per_node = {"mig-1g.5gb": 1}
           ```
@@ -73,7 +74,8 @@ class CustomTrainerContainer:
           ```python
           resources_per_node = {"gpu": 4, "cpu": 5, "memory": "10G"}
           ```
-         If your compute supports fractional GPUs (e.g. multi-instance GPU), you can set the resources as follows (request 1 GPU slice of 5Gb) :
+         If your compute supports fractional GPUs (e.g. multi-instance GPU),
+            you can set the resources as follows (request 1 GPU slice of 5Gb) :
           ```python
           resources_per_node = {"mig-1g.5gb": 1}
           ```
