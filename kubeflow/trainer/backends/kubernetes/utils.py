@@ -52,7 +52,7 @@ def get_container_devices(
     elif any(k.startswith(constants.GPU_MIG_PREFIX) for k in resources.limits):
         mig_keys = [k for k in resources.limits if k.startswith(constants.GPU_MIG_PREFIX)]
         if len(mig_keys) > 1:
-            raise Exception(f"Multiple MIG resource types are not supported yet: {mig_keys}")
+            raise ValueError(f"Multiple MIG resource types are not supported yet: {mig_keys}")
         mig_key = mig_keys[0]
         device = mig_key.split("/")[1]
         device_count = resources.limits[mig_key].actual_instance
