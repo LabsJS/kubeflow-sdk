@@ -59,7 +59,7 @@ def _build_runtime() -> types.Runtime:
                     }
                 )
             },
-            expected_error=Exception,
+            expected_error=ValueError,
         ),
     ],
 )
