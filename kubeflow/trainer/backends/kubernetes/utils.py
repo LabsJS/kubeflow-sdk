@@ -46,9 +46,6 @@ def get_container_devices(
     elif constants.TPU_LABEL in resources.limits:
         device = constants.TPU_LABEL.split("/")[1]
         device_count = resources.limits[constants.TPU_LABEL].actual_instance
-    elif constants.CPU_LABEL in resources.limits:
-        device = constants.CPU_LABEL
-        device_count = resources.limits[constants.CPU_LABEL].actual_instance
     elif any(k.startswith(constants.GPU_MIG_PREFIX) for k in resources.limits):
         mig_keys = [k for k in resources.limits if k.startswith(constants.GPU_MIG_PREFIX)]
         if len(mig_keys) > 1:
@@ -56,6 +53,9 @@ def get_container_devices(
         mig_key = mig_keys[0]
         device = mig_key.split("/")[1]
         device_count = resources.limits[mig_key].actual_instance
+    elif constants.CPU_LABEL in resources.limits:
+        device = constants.CPU_LABEL
+        device_count = resources.limits[constants.CPU_LABEL].actual_instance
     else:
         raise Exception(f"Unknown device type in the container resources: {resources.limits}")
     if device_count is None:
